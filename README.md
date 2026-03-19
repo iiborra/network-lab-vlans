@@ -1,7 +1,10 @@
-# Proyecto: Laboratorio de VLANs
+# Proyecto: Laboratorio de VLANs y Trunking
 
 ## Objetivo
+
 Diseñar e implementar una red segmentada mediante VLANs para separar tráfico de administración, invitados e IoT.
+
+Implementar una conexión entre switches con vlan usando puertos Trunks.
 
 ---
 
@@ -13,8 +16,10 @@ Diseñar e implementar una red segmentada mediante VLANs para separar tráfico d
 | PC1        | Fa0      | 192.168.10.2     | 10   |
 | PC2        | Fa0      | 192.168.20.1     | 20   |
 | PC3        | Fa0      | 192.168.30.1     | 30   |
+| PC4        | Fa0      | 192.168.10.3     | 10   |
+| PC5        | Fa0      | 192.168.20.2     | 20   |
 
-## Configuración de interfaces del switch
+## Configuración de interfaces del switch0
 
 | Interfaz | Modo   | VLAN asignada |
 |----------|--------|---------------|
@@ -22,6 +27,15 @@ Diseñar e implementar una red segmentada mediante VLANs para separar tráfico d
 | Fa0/2    | Access | 10            |
 | Fa0/3    | Access | 20            |
 | Fa0/4    | Access | 30            |
+| Fa0/24    | Trunk |             |
+
+## Configuración de interfaces del switch1
+
+| Interfaz | Modo   | VLAN asignada |
+|----------|--------|---------------|
+| Fa0/1    | Access | 10            |
+| Fa0/2    | Access | 20            |
+| Fa0/24    | Trunk |             |
 
 ## Diseño de red
 
@@ -74,9 +88,13 @@ interface fa0/1
 
 interface fa0/2
  switchport mode access
- switchport access vlan 20
+ switchport access vlan 10
 
 interface fa0/3
+ switchport mode access
+ switchport access vlan 20
+
+interface fa0/4
  switchport mode access
  switchport access vlan 30
  
@@ -87,7 +105,7 @@ interface fa0/3
 ```bash
 interface fa0/24
  switchport mode trunk
- 
+ ```
  ## Pruebas
  
  ### Ping dentro de la misma VLAN
@@ -96,12 +114,27 @@ interface fa0/24
  ### Ping entre VLANs
  PC0 --> PC2 --> FAIL
  PC0 --> PC3 --> FAIL
+ 
+  ### Ping dentro de la misma VLAN a través de switches
+ PC0 --> PC4 --> OK
+ PC0 --> PC5 --> FAIL
+ 
+## Verificación
+
+### VLANs
+```bash
+show vlan brief
 ```
+## Funcionamiento del trunk
+
+El enlace trunk permite transportar múltiples VLANs mediante etiquetado 802.1Q. Cada frame incluye un identificador de VLAN que permite a los switches mantener la segmentación de la red a través del enlace.
+
  
 ### Resultados
  - Los dispositivos dentro de la misma VLAN tienen conectividad
  - Los dispositivos de distinta VLAN no pueden comunicarse
  - La segmentación funciona correctamente
+ - El trunk funciona correctamente
  
  ## Conclusión
 

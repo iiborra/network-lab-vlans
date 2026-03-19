@@ -20,10 +20,6 @@ interface fa0/2
  switchport mode access
  switchport access vlan 20
 
-interface fa0/3
- switchport mode access
- switchport access vlan 30
-
 interface fa0/24
  switchport mode trunk
 

@@ -1,0 +1,35 @@
+show running-config
+
+enable
+configure terminal
+
+vlan 10
+ name ADMIN
+
+vlan 20
+ name GUEST
+
+vlan 30
+ name IOT
+
+interface fa0/1
+ switchport mode access
+ switchport access vlan 10
+
+interface fa0/2
+ switchport mode access
+ switchport access vlan 10
+
+interface fa0/3
+ switchport mode access
+ switchport access vlan 20
+
+interface fa0/4
+ switchport mode access
+ switchport access vlan 30
+
+interface fa0/24
+ switchport mode trunk
+
+end
+write memory
