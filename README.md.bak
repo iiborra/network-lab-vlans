@@ -106,11 +106,3 @@ interface fa0/24
  ## Conclusión
 
 Se ha implementado correctamente la segmentación mediante VLANs en un switch L2, comprobando aislamiento entre redes y conectividad interna.
-
-## Laboratorio
-
-El archivo de Packet Tracer utilizado en este proyecto está disponible en:
-
-`labs/vlan-lab.pkt`
-
-Permite replicar la topología y configuraciones descritas.
