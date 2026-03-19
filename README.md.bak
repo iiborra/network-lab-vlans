@@ -36,30 +36,3 @@ vlan 20
 
 vlan 30
  name IOT
-
-
-``` 
-### Puertos access
-
-```bash
-interface fa0/1
- switchport mode access
- switchport access vlan 10
-
-interface fa0/2
- switchport mode access
- switchport access vlan 20
-
-interface fa0/3
- switchport mode access
- switchport access vlan 30
- 
- ```
- 
-### 2) Puerto trunk
-```markdown
-### Puerto trunk
-
-```bash
-interface fa0/24
- switchport mode trunk
