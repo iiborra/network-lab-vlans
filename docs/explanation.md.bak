@@ -21,11 +21,3 @@ En una empresa o vivienda conectada, no conviene que todos los dispositivos est‚
 
 ## Limitaciones del laboratorio
 Este proyecto no incluye enrutamiento entre VLANs. Por tanto, los dispositivos de distintas VLAN no pueden comunicarse entre s¡.
-
-## Laboratorio
-
-El archivo de Packet Tracer utilizado en este proyecto est  disponible en:
-
-`labs/vlan-lab.pkt`
-
-Permite replicar la topolog¡a y configuraciones descritas.
