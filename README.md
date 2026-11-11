@@ -1,72 +1,71 @@
-# Proyecto: Laboratorio de VLANs y Trunking
+# Project: VLAN and Trunking Lab
 
-## Objetivo
+## Objective
 
-Diseñar e implementar una red segmentada mediante VLANs para separar tráfico de administración, invitados e IoT.
+Design and implement a network segmented with VLANs to separate administration, guest and IoT traffic.
 
-Implementar una conexión entre switches con vlan usando puertos Trunks.
+Connect two switches with a trunk link that carries the VLANs between them.
 
 ---
 
-## Dispositivos y direccionamiento
+## Devices and addressing
 
-| Dispositivo | Interfaz | Dirección IP     | VLAN |
-|------------|----------|------------------|------|
-| PC0        | Fa0      | 192.168.10.1     | 10   |
-| PC1        | Fa0      | 192.168.10.2     | 10   |
-| PC2        | Fa0      | 192.168.20.1     | 20   |
-| PC3        | Fa0      | 192.168.30.1     | 30   |
-| PC4        | Fa0      | 192.168.10.3     | 10   |
-| PC5        | Fa0      | 192.168.20.2     | 20   |
+| Device | Interface | IP address       | VLAN |
+|--------|-----------|------------------|------|
+| PC0    | Fa0       | 192.168.10.1     | 10   |
+| PC1    | Fa0       | 192.168.10.2     | 10   |
+| PC2    | Fa0       | 192.168.20.1     | 20   |
+| PC3    | Fa0       | 192.168.30.1     | 30   |
+| PC4    | Fa0       | 192.168.10.3     | 10   |
+| PC5    | Fa0       | 192.168.20.2     | 20   |
 
-## Configuración de interfaces del switch0
+## Switch0 interface configuration
 
-| Interfaz | Modo   | VLAN asignada |
-|----------|--------|---------------|
-| Fa0/1    | Access | 10            |
-| Fa0/2    | Access | 10            |
-| Fa0/3    | Access | 20            |
-| Fa0/4    | Access | 30            |
-| Fa0/24    | Trunk |             |
+| Interface | Mode   | Assigned VLAN |
+|-----------|--------|---------------|
+| Fa0/1     | Access | 10            |
+| Fa0/2     | Access | 10            |
+| Fa0/3     | Access | 20            |
+| Fa0/4     | Access | 30            |
+| Fa0/24    | Trunk  |               |
 
-## Configuración de interfaces del switch1
+## Switch1 interface configuration
 
-| Interfaz | Modo   | VLAN asignada |
-|----------|--------|---------------|
-| Fa0/1    | Access | 10            |
-| Fa0/2    | Access | 20            |
-| Fa0/24    | Trunk |             |
+| Interface | Mode   | Assigned VLAN |
+|-----------|--------|---------------|
+| Fa0/1     | Access | 10            |
+| Fa0/2     | Access | 20            |
+| Fa0/24    | Trunk  |               |
 
-## Diseño de red
+## Network design
 
-Se ha segmentado la red en tres VLANs independientes, asignando un rango de direcciones IP por cada VLAN:
+The network is split into three independent VLANs, each with its own IP range:
 
 - VLAN 10 → 192.168.10.0/24
 - VLAN 20 → 192.168.20.0/24
 - VLAN 30 → 192.168.30.0/24
 
+## Topology
 
-## Topología
-
-![Topología](images/topology.png)
+![Topology](images/topology.png)
 
 ---
 
-## Diseño de red
+## VLAN roles
 
-- VLAN 10 → Administración
-- VLAN 20 → Invitados
+- VLAN 10 → Administration
+- VLAN 20 → Guests
 - VLAN 30 → IoT
 
-- Switch L2 con puertos:
-  - Access para hosts
-  - Trunk entre switches
+- Layer 2 switches with:
+  - Access ports for hosts
+  - A trunk port between the switches
 
 ---
 
-## Configuración
+## Configuration
 
-### Creación de VLANs
+### Creating the VLANs
 
 ```bash
 vlan 10
@@ -79,7 +78,7 @@ vlan 30
  name IOT
 ```
 
-### Puertos access
+### Access ports
 
 ```bash
 interface fa0/1
@@ -97,53 +96,58 @@ interface fa0/3
 interface fa0/4
  switchport mode access
  switchport access vlan 30
- 
-``` 
+```
 
-### Puerto trunk
+### Trunk port
 
 ```bash
 interface fa0/24
  switchport mode trunk
- ```
- ## Pruebas
- 
- ### Ping dentro de la misma VLAN
- PC0 --> PC1 --> OK
- 
- ### Ping entre VLANs
- PC0 --> PC2 --> FAIL
- PC0 --> PC3 --> FAIL
- 
-  ### Ping dentro de la misma VLAN a través de switches
- PC0 --> PC4 --> OK
- PC0 --> PC5 --> FAIL
- 
-## Verificación
+```
+
+## Tests
+
+### Ping within the same VLAN
+
+PC0 → PC1 → OK
+
+### Ping between VLANs
+
+PC0 → PC2 → FAIL
+PC0 → PC3 → FAIL
+
+### Ping across the trunk
+
+PC0 → PC4 (same VLAN, other switch) → OK
+PC0 → PC5 (different VLAN, other switch) → FAIL
+
+## Verification
 
 ### VLANs
+
 ```bash
 show vlan brief
 ```
-## Funcionamiento del trunk
 
-El enlace trunk permite transportar múltiples VLANs mediante etiquetado 802.1Q. Cada frame incluye un identificador de VLAN que permite a los switches mantener la segmentación de la red a través del enlace.
+## How the trunk works
 
- 
-### Resultados
- - Los dispositivos dentro de la misma VLAN tienen conectividad
- - Los dispositivos de distinta VLAN no pueden comunicarse
- - La segmentación funciona correctamente
- - El trunk funciona correctamente
- 
- ## Conclusión
+The trunk link carries several VLANs using 802.1Q tagging. Each frame includes a VLAN identifier, which lets the switches keep the network segmented across the link.
 
-Se ha implementado correctamente la segmentación mediante VLANs en un switch L2, comprobando aislamiento entre redes y conectividad interna.
+### Results
 
-## Laboratorio
+- Devices in the same VLAN can reach each other
+- Devices in different VLANs cannot communicate
+- Segmentation works as designed
+- The trunk works as designed
 
-El archivo de Packet Tracer utilizado en este proyecto está disponible en:
+## Conclusion
+
+VLAN segmentation was implemented on Layer 2 switches, confirming isolation between networks and connectivity within each one.
+
+## Lab file
+
+The Packet Tracer file used in this project is available at:
 
 `labs/vlan-lab.pkt`
 
-Permite replicar la topología y configuraciones descritas.
+It reproduces the topology and configurations described above.
